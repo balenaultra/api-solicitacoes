@@ -59,7 +59,7 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-function emit(message) {
+/*function emit(message) {
   emitter.emit('event', message)       
 }
 
@@ -73,7 +73,8 @@ app.get("/stream", (req, res) => {
     res.write("data:" + message + "\n\n");   
   })
 
-}).listen(8080);
+}).listen(8080);*/
+
 /*
 http.Server(function(req, res){
     console.log(req.method);
@@ -94,4 +95,4 @@ http.Server(function(req, res){
   
   }).listen(8080, '0.0.0.0');
   */
-  module.exports = { emitter }
+  //module.exports = { emitter }
