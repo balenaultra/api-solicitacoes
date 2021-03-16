@@ -1,0 +1,17 @@
+{
+  "name": "ultra-solicitacoes-api",
+  "version": "0.1",
+  "main": "bin/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test speciefied\" && exit 1",
+    "dev": "nodemon --inspect bin/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-sse": "^0.5.3",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.3.0",
+    "pg": "^8.5.1"
+  }
+}
