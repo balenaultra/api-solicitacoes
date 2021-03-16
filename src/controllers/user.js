@@ -61,10 +61,6 @@ exports.authenticate = async (req, res, next) => {
             roles: user.roles,
         });
 
-        Server.emitter.emit('event', 'teste')
-        console.log('evwnrrwarw');
-
-
         res.status(200).send({
             token: token,            
             user: user
