@@ -5,6 +5,8 @@ const repository = require('../repositories/user');
 const md5 = require('md5');
 const authService = require('../services/auth');
 
+//const ServerStream = require('../../bin/server_stream')
+
 exports.post = async (req, res, next) => {
     let contract = new ValidationContract();
     //TODO contract.hasMinLen(req.body.name, 3, 'O nome deve conter pelo menos 3 caracteres');

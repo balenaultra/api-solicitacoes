@@ -1,8 +1,6 @@
 const app = require('../src/app');
 const debug = require('debug')('nodestr:server');
 const http = require('http');
-const EventEmitter = require('events')
-const emitter = new EventEmitter()
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
@@ -95,4 +93,4 @@ http.Server(function(req, res){
   
   }).listen(8080, '0.0.0.0');
   */
-  //module.exports = { emitter }
+  module.exports = { app }
