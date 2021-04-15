@@ -30,10 +30,11 @@ exports.get = async(data) => {
         `    SELECT r.*, 
                     t.description AS request_type_description,
                     u.name AS name_requester
-            FROM ultra.requests r 
-            LEFT JOIN ultra.request_types t ON t.id = r.id_request_type  
-            LEFT JOIN ultra.users u ON u.id = r.id_user_requester
-            WHERE (r.id_user_requested = ${data.decoded.id} ) `;
+               FROM ultra.requests r 
+          LEFT JOIN ultra.request_types t ON t.id = r.id_request_type  
+          LEFT JOIN ultra.users u ON u.id = r.id_user_requester
+              WHERE (r.id_user_requested = ${data.decoded.id} ) 
+           ORDER BY r.request_date DESC `;
 
     const result = await database.asyncQuery(sql);
 
@@ -41,23 +42,25 @@ exports.get = async(data) => {
 }
 
 exports.update = async(id, data) => {
-    const {response, response_message, response_date} = data;
-
-    const sql = 
-        ` UPDATE ultra.requests SET 
-                 response = ${response} , 
-                 response_message = '${response_message}',
-                 response_date = '${response_date}'
-          WHERE id = ${id} `;
-    
     try {
+        const {response, response_message} = data;   
+
+        let response_date = Date().now;
+
+        const sql = 
+            ` UPDATE ultra.requests SET 
+                    response = ${response} , 
+                    response_message = '${response_message}',
+                    response_date = (to_timestamp(${Date.now()} / 1000.0)) 
+            WHERE id = ${id}`;    
+    
         const result = await database.asyncQuery(sql);
 
         console.log(`Request updated with ID: ${id}`);
         
         return id;    
-    } catch (e) {
+    } catch (e) {        
         console.log(e);
-    }
-    
+        throw e;
+    }    
 }
