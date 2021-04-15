@@ -3,6 +3,7 @@ const debug = require('debug')('nodestr:server');
 const http = require('http');
 
 const port = normalizePort(process.env.PORT || '3000');
+
 app.set('port', port);
 
 const server = http.createServer(app);
@@ -56,41 +57,3 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
-
-/*function emit(message) {
-  emitter.emit('event', message)       
-}
-
-app.get("/stream", (req, res) => {
-  console.log(req.method);
-
-  res.setHeader('Content-Type', 'text/event-stream');
-
-  emitter.on('event', (message) => {
-    console.log(message);
-    res.write("data:" + message + "\n\n");   
-  })
-
-}).listen(8080);*/
-
-/*
-http.Server(function(req, res){
-    console.log(req.method);
-  
-    // Setamos as headers para indicar um SSE e evitar cache
-    res.writeHead(200, {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Access-Control-Allow-Origin': '*',
-      'Connection': 'keep-alive'
-    });
-    
-    // Caso a conexão caia/pare/feche, precisamos parar o timer
-    req.on('close', function(){
-      console.log('close');
-
-    });
-  
-  }).listen(8080, '0.0.0.0');
-  */
-  module.exports = { app }
