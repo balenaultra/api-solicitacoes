@@ -9,7 +9,7 @@ exports.create = async(data) => {
 
   const sql = 
     ` INSERT INTO ultra.users (name, email, company_cpf_cnpj, code, password)
-      VALUES ('${name}', '${email}', '${cnpj}', ${code}, '${password}') 
+      VALUES ('${name}', '${email}', '${cnpj.replace(/\D/g, "")}', ${code}, '${password}') 
       RETURNING id `;
 
   const result = await database.asyncQuery(sql);
@@ -28,9 +28,27 @@ exports.authenticate = async(data) => {
   const sql = 
     `SELECT * 
        FROM ultra.users 
-      WHERE company_cpf_cnpj ='${data.company_cpf_cnpj}'
+      WHERE company_cpf_cnpj = '${data.company_cpf_cnpj.replace(/\D/g, "")}'
         AND code = ${data.code}
         AND password ='${data.password}'`;
+  
+  const result = await database.asyncQuery(sql);
+
+  //console.log(result.rows);
+
+  if (result.rows.length > 0) {
+    let row = result.rows[0];
+
+    //console.log(row);
+    return row;
+  }
+}
+
+exports.getById = async(data) => {
+  const sql = 
+    `SELECT * 
+       FROM ultra.users 
+      WHERE id = ${data}`;
   
   const result = await database.asyncQuery(sql);
 
