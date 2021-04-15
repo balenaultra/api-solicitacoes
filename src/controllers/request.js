@@ -22,7 +22,8 @@ exports.post = async (req, res, next) => {
         res.status(201).send({
             message: 'Solicitação cadastrada com sucesso!'
         });
-        
+        next();
+                
     } catch (e) {
         console.log(e);
         res.status(500).send({
