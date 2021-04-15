@@ -5,8 +5,6 @@ const repository = require('../repositories/user');
 const md5 = require('md5');
 const authService = require('../services/auth');
 
-//const ServerStream = require('../../bin/server_stream')
-
 exports.post = async (req, res, next) => {
     let contract = new ValidationContract();
     //TODO contract.hasMinLen(req.body.name, 3, 'O nome deve conter pelo menos 3 caracteres');
@@ -45,9 +43,7 @@ exports.authenticate = async (req, res, next) => {
             company_cpf_cnpj: req.body.company_cpf_cnpj,
             code: req.body.code,            
             password: md5(req.body.password + global.SALT_KEY)
-        });
-
-        //console.log(user);
+        });        
         
         if (!user) {
             res.status(404).send({
@@ -61,12 +57,18 @@ exports.authenticate = async (req, res, next) => {
             email: user.email,
             name: user.name,
             roles: user.roles,
-        });
+            company_cpf_cnpj: user.company_cpf_cnpj
+        });        
 
         res.status(200).send({
             token: token,            
             user: user
-        });
+        }); 
+        
+        res.user = user;
+        
+        next();
+          
     } catch (e) {
         console.log(e);
         res.status(500).send({
@@ -77,10 +79,11 @@ exports.authenticate = async (req, res, next) => {
 
 exports.refreshToken = async (req, res, next) => {
     try {
-        const token = req.body.token || req.query.token || req.headers['x-access-token'];
+        const token = req.body.token || req.query.token || req.headers['x-access-token'];        
+
         const data = await authService.decodeToken(token);
 
-        const user = await repository.getById(data.id);
+        const user = await repository.getById(data.id);        
 
         if (!user) {
             res.status(404).send({
@@ -97,14 +100,11 @@ exports.refreshToken = async (req, res, next) => {
 
         res.status(201).send({
             token: tokenData,
-            data: {
-                email: user.email,
-                name: user.name
-            }
+            user: user
         });
     } catch (e) {
         res.status(500).send({
-            message: 'Falha ao processar sua requisição'
+            message: `Falha ao processar sua requisição ${e.message}`
         });
     }
 };
