@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 exports.get = async(req, res, next) => {
     try {
         var data = await repository.get(req);
+
         res.status(200).send(data);    
     } catch (e) {
         res.status(500).send({
@@ -23,7 +24,7 @@ exports.post = async (req, res, next) => {
             message: 'Solicitação cadastrada com sucesso!'
         });
         next();
-                
+
     } catch (e) {
         console.log(e);
         res.status(500).send({

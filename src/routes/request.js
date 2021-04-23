@@ -17,4 +17,6 @@ router.put('/:id', authService.authorize, controller.put,
 }); 
 router.get('/', authService.authorize, controller.get);
 
+router.get('/:date', authService.authorize, controller.get);
+
 module.exports = router;

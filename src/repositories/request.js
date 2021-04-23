@@ -3,7 +3,7 @@
 const database = require('../config/database');
 
 exports.create = async(data) => {
-    console.log(data.body);
+    //console.log(data.body);
 
     const {id_user_requester, id_user_requested, id_request_type, request_message, request_date, request_detail} = data.body;  
 
@@ -14,7 +14,7 @@ exports.create = async(data) => {
 
     const result = await database.asyncQuery(sql);
                         
-    console.log(result.rows);
+    //console.log(result.rows);
 
     if (result.rows.length > 0) {
         let id = result.rows[0].id;
@@ -26,6 +26,16 @@ exports.create = async(data) => {
 }
 
 exports.get = async(data) => {
+    const { date } = data.params;
+
+    //'AND (r.response IS NOT NULL)'
+
+    let sql_filter_date = '';
+    if (date) 
+         sql_filter_date = 
+          `
+          AND (CAST(r.request_date AS DATE) = '${date}')          
+          `;
     const sql = 
         `    SELECT r.*, 
                     t.description AS request_type_description,
@@ -34,6 +44,7 @@ exports.get = async(data) => {
           LEFT JOIN ultra.request_types t ON t.id = r.id_request_type  
           LEFT JOIN ultra.users u ON u.id = r.id_user_requester
               WHERE (r.id_user_requested = ${data.decoded.id} ) 
+                ${sql_filter_date}
            ORDER BY r.request_date DESC `;
 
     const result = await database.asyncQuery(sql);
@@ -43,9 +54,7 @@ exports.get = async(data) => {
 
 exports.update = async(id, data) => {
     try {
-        const {response, response_message} = data;   
-
-        let response_date = Date().now;
+        const {response, response_message} = data;
 
         const sql = 
             ` UPDATE ultra.requests SET 
